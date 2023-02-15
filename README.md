@@ -1,7 +1,7 @@
 # Word Ladders with Stacks and Queues
 [![](https://github.com/lwelch25/word_ladder/workflows/tests/badge.svg)](https://github.com/lwelch25/word_ladder/actions?query=workflow%3Atests)
 
-You will implement a solution to Lewis Carroll's [word ladder game](https://en.wikipedia.org/wiki/Word_ladder).
+YYou will implement a solution to Lewis Carroll's [word ladder game](https://en.wikipedia.org/wiki/Word_ladder).
 
 **Learning Objectives:**
 
