@@ -1,5 +1,7 @@
 #!/bin/python3
 
+from collections import deque
+
 
 def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
     '''
@@ -14,60 +16,82 @@ def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
     ```
     may give the output
     ```
-    ['stone', 'shone', 'phone', 'phony', 'peony',
-    'penny', 'benny', 'bonny', 'boney', 'money']
+    ['stone', 'shone', 'phone', 'phony', 'peony', 'penny', 'benny', 'bonny', 'boney', 'money']
     ```
     but the possible outputs are not unique,
     so you may also get the output
     ```
-    ['stone', 'shone', 'shote', 'shots', 'soots',
-    'hoots', 'hooty', 'hooey', 'honey', 'money']
+    ['stone', 'shone', 'shote', 'shots', 'soots', 'hoots', 'hooty', 'hooey', 'honey', 'money']
     ```
     (We cannot use doctests here because the outputs are not unique.)
     Whenever it is impossible to generate a word ladder between the two words,
     the function returns `None`.
     '''
-    from collections import deque
-    from copy import deepcopy
 
-    f = open(dictionary_file)
-    dictionary = f.read().split("\n")
-
-    s = []
-    s.append(start_word)
-    q = deque()
-    q.append(s)
+    '''
+    prev: ['babes', 'banes', 'wanes', 'wants', 'waits', 'whits', 'white', 'while', 'chile', 'child']
+    added dictionary_copy
+    new: ['babes', 'bares', 'barns', 'carns', 'cains', 'chins', 'chine', 'chile', 'child']
+    '''
 
     if start_word == end_word:
-        return s
+        return [start_word]
 
-    while len(q) != 0:
-        top = q.pop()
-        dictionary_copy = deepcopy(dictionary)
+    # create dictionary
+    with open(dictionary_file, 'r') as f:
+        dictionary = f.read().splitlines()
+
+    # Create a stack
+    stack = []
+    # Push the start word onto the stack
+    stack.append(start_word)
+    # Create a queue
+    queue = deque()
+    # Enqueue the stack onto the queue
+    queue.append(stack)
+
+    # While the queue is not empty
+    while len(queue) != 0:
+        # Dequeue a stack from the queue
+        stack = queue.popleft()
+        # For each word in the dictionary
+        dictionary_copy = dictionary.copy()
         for word in dictionary_copy:
-            if _adjacent(top[-1], word) is True:
-                copy = deepcopy(top)
-                copy.append(word)
+            # If the word is adjacent to the top of the stack
+            if _adjacent(word, stack[-1]):
+                # If this word is the end word
                 if word == end_word:
-                    return copy
-                q.appendleft(copy)
+                    '''done'''
+                    # You are done!
+                    # The front stack plus this word is your word ladder.
+                    stack.append(word)
+                    return stack
+                # Make a copy of the stack
+                stack_copy = stack.copy()
+                # Push the found word onto the copy
+                stack_copy.append(word)
+                # Enqueue the copy
+                queue.append(stack_copy)
+                # Delete word from the dictionary
+                '''PROB GOD AWEFUL'''
                 dictionary.remove(word)
-    return None
 
 
 def verify_word_ladder(ladder):
     '''
     Returns True if each entry of the input list is adjacent to its neighbors;
     otherwise returns False.
+    >>> verify_word_ladder(['stone', 'shone', 'phone', 'phony'])
+    True
+    >>> verify_word_ladder(['stone', 'shone', 'phony'])
+    False
     '''
-
     if len(ladder) == 0:
         return False
-    else:
-        for i in range(len(ladder)-1):
-            if _adjacent(ladder[i], ladder[i+1]) is False:
-                return False
-        return True
+    for i in range(len(ladder) - 1):
+        if not _adjacent(ladder[i], ladder[i + 1]):
+            return False
+    return True
 
 
 def _adjacent(word1, word2):
@@ -79,15 +103,13 @@ def _adjacent(word1, word2):
     >>> _adjacent('stone','money')
     False
     '''
-
-    diff = 0
     if len(word1) != len(word2):
         return False
-    else:
-        for i in range(len(word1)):
-            if word1[i] != word2[i]:
-                diff = diff + 1
-        if diff == 1:
-            return True
-        else:
-            return False
+    # diff char counter
+    d = 0
+    for i in range(len(word1)):
+        if word1[i] != word2[i]:
+            d += 1
+    if d == 1:
+        return True
+    return False
