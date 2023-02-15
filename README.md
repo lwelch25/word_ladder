@@ -13,7 +13,7 @@ YYou will implement a solution to Lewis Carroll's [word ladder game](https://en.
 
 [Leetcode](https://leetcode.com/problemset/all/) is a common method used for technical interviews.
 The world ladder problem is an example of a problem that leetcode puts in their hardest-to-solve category (see [the problem description on leetcode.com](https://leetcode.com/problems/word-ladder/)).
-What makes these problems "hard" is figuring out the right pseudocode.
+WWhat makes these problems "hard" is figuring out the right pseudocode.
 Translating from pseudocode into working code is considered "easy".
 
 IIn this assignment, we will practice the translation of pseudocode into working python code.

@@ -36,44 +36,25 @@ def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
 
     if start_word == end_word:
         return [start_word]
+    with open(dictionary_file, 'r') as x:
+        dictionary = x.read().splitlines()
 
-    # create dictionary
-    with open(dictionary_file, 'r') as f:
-        dictionary = f.read().splitlines()
-
-    # Create a stack
     stack = []
-    # Push the start word onto the stack
     stack.append(start_word)
-    # Create a queue
     queue = deque()
-    # Enqueue the stack onto the queue
     queue.append(stack)
 
-    # While the queue is not empty
     while len(queue) != 0:
-        # Dequeue a stack from the queue
         stack = queue.popleft()
-        # For each word in the dictionary
         dictionary_copy = dictionary.copy()
         for word in dictionary_copy:
-            # If the word is adjacent to the top of the stack
             if _adjacent(word, stack[-1]):
-                # If this word is the end word
                 if word == end_word:
-                    '''done'''
-                    # You are done!
-                    # The front stack plus this word is your word ladder.
                     stack.append(word)
                     return stack
-                # Make a copy of the stack
                 stack_copy = stack.copy()
-                # Push the found word onto the copy
                 stack_copy.append(word)
-                # Enqueue the copy
                 queue.append(stack_copy)
-                # Delete word from the dictionary
-                '''PROB GOD AWEFUL'''
                 dictionary.remove(word)
 
 
@@ -106,10 +87,10 @@ def _adjacent(word1, word2):
     if len(word1) != len(word2):
         return False
     # diff char counter
-    d = 0
+    difference = 0
     for i in range(len(word1)):
         if word1[i] != word2[i]:
-            d += 1
-    if d == 1:
+            difference += 1
+    if difference == 1:
         return True
     return False
